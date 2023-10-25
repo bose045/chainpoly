@@ -1,0 +1,22 @@
+variable scalefactor equal 0.063496
+variable comxbox  equal  xlo+(lx/2)
+variable comzbox  equal  zlo+(lz/2)
+variable finalLx equal lx*${scalefactor}
+variable finalLz equal lz*${scalefactor}
+variable finalxlo equal ${comxbox}-lx*${scalefactor}*0.5
+variable finalxhi equal ${comxbox}+lx*${scalefactor}*0.5
+variable finalzlo equal ${comzbox}+lx*${scalefactor}*0.5
+variable finalzhi equal ${comzbox}+lx*${scalefactor}*0.5
+variable comxG1 equal xlo+(lx*0.500000)
+variable comzG1 equal zlo+(lz*0.500000)
+variable wallxlo1 equal ${comxG1}-22.800000
+variable wallxhi1 equal ${comxG1}+22.800000
+variable wallzlo1 equal ${comzG1}-3.000000
+variable wallzhi1 equal ${comzG1}+3.000000
+region      blkin1 block ${wallxlo1} ${wallxhi1} INF INF ${wallzlo1} ${wallzhi1} side in
+delete_atoms region blkin1
+variable dx1 equal ramp(0,0.000000)
+variable dz1 equal ramp(0,0.000000)
+variable dy1 equal 0
+region  blk1 block ${wallxlo1} ${wallxhi1} INF INF ${wallzlo1} ${wallzhi1} side out
+fix wall1 all wall/region blk1 lj126 0.05 0.25 1.5

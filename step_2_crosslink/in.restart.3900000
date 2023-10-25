@@ -1,0 +1,195 @@
+# 3d Lennard-Jones melt
+
+### monodisperse polymer of Binghui paper
+#processors 8 1 8
+units		lj
+atom_style	atomic
+atom_modify	map array
+boundary p p p
+read_restart  restart.first_compressed
+#create_atoms 8 random 1 46458 NULL
+#read_data temporary_data_file.data
+variable comxG1 equal xlo+(lx*0.500000)
+variable comyG1 equal ylo+(ly*0.500000)
+variable comzG1 equal zlo+(lz*0.500000)
+#read_data 13x16_G_0d_4_1flake_edgetrimmed_zerocentered_edge_both.lmp add append shift ${comxG1} ${comyG1} ${comzG1} 
+pair_style table linear 5000
+
+pair_coeff 1 1 table.txt aa_eps_b_10
+pair_coeff 1 2 table.txt ab_noreact_eps_b_10
+pair_coeff 2 2 table.txt aa_eps_b_10
+pair_coeff 3 3 table_g.txt g1g1_eps_10
+pair_coeff 3 4 table_g.txt g1g2_eps_10
+pair_coeff 4 4 table_g.txt g1g1_eps_10
+pair_coeff 5 5 table.txt ll
+pair_coeff 1 5 table.txt al_repulse
+pair_coeff 2 5 table.txt bl
+pair_coeff 1 3 table.txt ag1
+pair_coeff 1 4 table.txt ag2
+pair_coeff 2 3 table.txt bg1
+pair_coeff 2 4 table.txt bg2
+pair_coeff 6 6 table.txt s1s1
+pair_coeff 6 7 table.txt s1s2
+pair_coeff 7 7 table.txt s2s2
+pair_coeff 3 6 table.txt g1s1
+pair_coeff 4 7 table.txt g1s2
+pair_coeff 3 7 table.txt g1s2
+pair_coeff 4 6 table.txt g2s1
+pair_coeff 3 5 table.txt aa_eps_b_10
+pair_coeff 4 5 table.txt aa_eps_b_10
+pair_coeff 5 6 table.txt ls1
+pair_coeff 5 7 table.txt ls2
+pair_coeff 1 6 table.txt as1
+pair_coeff 1 7 table.txt as2
+pair_coeff 2 7 table.txt bs2
+pair_coeff 2 6 table.txt bs1
+pair_coeff 1 3 table.txt gpol_sigma_1.175_eps_0.0938_bump_6.4
+pair_coeff 1 4 table.txt gpol_sigma_1.175_eps_0.0938_bump_6.4
+pair_coeff 1 3 table.txt ag1
+pair_coeff 1 4 table.txt ag2
+#mass * 1
+#write_data temporary_data_file.data nocoeff
+#quit
+pair_coeff 8 8 table.txt ll
+pair_coeff 1 8 table.txt al_repulse
+pair_coeff 2 8 table.txt bl
+pair_coeff 3 8 table.txt aa_eps_b_10
+pair_coeff 4 8 table.txt aa_eps_b_10
+pair_coeff 8 6 table.txt ls1
+pair_coeff 8 7 table.txt ls2
+pair_coeff 5 8 table.txt ll
+##edge  6 is 4 inside graphene. 6 is 3 for others
+pair_coeff 1 6 table.txt ag1
+pair_coeff 2 6 table.txt bg1
+pair_coeff 3 6 table_g.txt g1g2_eps_10
+pair_coeff 4 6 table_g.txt g1g1_eps_10
+pair_coeff 5 6 table.txt aa_eps_b_10
+pair_coeff 6 6 table_g.txt g1g1_eps_10
+pair_coeff 6 7 table_g.txt g1g2_eps_10
+pair_coeff 6 8 table.txt aa_eps_b_10 
+##edge 7 is 3 inside graphene. 7 is 4 for others
+pair_coeff 1 7 table.txt ag2
+pair_coeff 2 7 table.txt bg2
+pair_coeff 3 7 table_g.txt g1g1_eps_10
+pair_coeff 4 7 table_g.txt g1g2_eps_10
+pair_coeff 5 7 table.txt aa_eps_b_10
+pair_coeff 6 7 table_g.txt g1g2_eps_10
+pair_coeff 7 7 table_g.txt g1g1_eps_10
+pair_coeff 7 8 table.txt aa_eps_b_10
+
+mass * 25.01
+mass 3 12
+mass 4 12
+timestep 0.005
+reset_atom_ids
+
+variable	t equal 0.25
+variable thigh equal 0.35
+variable tint equal 0.175
+variable tlow equal 0.0115
+variable	c equal 2.35
+variable	s equal $c/2^(1./6.)
+variable 	pp equal 0.02
+
+pair_modify shift yes
+neighbor	0.3 bin
+neigh_modify	every 20 delay 0 check yes
+thermo_style    custom step temp press density pe etotal temp vol  pxx pyy pzz pxz lx ly lz enthalpy
+thermo		1000
+
+thermo 1000
+thermo_style    custom step density temp pe etotal temp vol press pxx pyy pzz pxz lx ly lz enthalpy
+
+dump            dump_geo all custom 100000 geodump3 id type x y z
+group g55 type 5
+
+write_data chain_s.g
+group g4 type 4
+group g_sat type 3 4 6 7
+#group non_g_sat type 1 2 5
+#group non_sat type 1 2 3 4 5
+#group poly type 1 2
+group linker type 5
+
+restart 100000 restart.*
+restart 10000 restart.current.1 restart.current.2
+
+compute 2 all coord/atom cutoff 1.51
+compute         3 all reduce sum c_2
+
+thermo_style    custom step density temp pe etotal vol press pxx pyy pzz pxz lx ly lz enthalpy
+run 0
+
+
+velocity all create ${tint} 546212
+#velocity g_sat set 0 0 0
+#fix   sf g_sat setforce 0 0 0
+
+write_data chain_s.2
+
+undump dump_geo 
+
+dump dump_geo all  custom 100000 dump_linking_process id type x y z
+
+fix             1 all nvt temp ${tint} ${tint} 0.1
+run 500000
+unfix 1
+write_data data.halfmill_relax_before_crosslinking
+
+#variable comxG1 equal xlo+(lx*0.500000)
+#variable comzG1 equal zlo+(lz*0.500000)
+#variable wallxlo1 equal ${comxG1}-22.8000000
+#variable wallxhi1 equal ${comxG1}+22.8000000
+#variable wallzlo1 equal ${comzG1}-3.00000
+#variable wallzhi1 equal ${comzG1}+3.00000
+
+#region gluewall block  ${wallxlo1}  ${wallxhi1}  INF INF ${wallzlo1}  ${wallzhi1}
+#group wallatoms region gluewall
+
+#group glue intersect wallatoms linker
+
+#set group glue type 8
+
+##edge
+#
+pair_coeff 6 8 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+pair_coeff 3 8 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+#pair_coeff 4 8 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+#pair_coeff 1 8 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+pair_coeff 5 6 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+pair_coeff 3 5 table.txt gpol_sigma_1.175_eps_6_bump_0.1
+
+pair_coeff 5 6 table.txt gpol_sigma_1.0_eps_0.0001_bump_0.0
+pair_coeff 3 5 table.txt gpol_sigma_1.0_eps_0.0001_bump_0.0
+
+pair_coeff 5 6 table.txt gpol_sigma_1.175_eps_1.0_bump_0.0_cut_2.2
+pair_coeff 3 5 table.txt gpol_sigma_1.175_eps_1.0_bump_0.0_cut_2.2
+
+pair_coeff 1 5 table.txt al_attract
+
+fix             1 all nvt temp ${tint} ${tint} 0.1
+run 200000
+unfix 1
+write_data initial_chain_linked
+
+#unfix sf
+
+
+#undump dump_geo
+
+#dump dump_geo2 all  custom 250 dump_linking_process_frequent id type x y z
+
+#fix             1 all nvt temp ${tint} ${tint} 0.1
+#run 10000
+#unfix 1
+#undump dump_geo2
+
+fix		1 all nvt temp ${tint} ${tint} 0.1
+run 4800000
+unfix 1
+write_data chain_linked
+
+
+#pair_coeff 1 5 table.txt al_attract_eps_b_10
+write_restart  restart.chain_linked
+quit
