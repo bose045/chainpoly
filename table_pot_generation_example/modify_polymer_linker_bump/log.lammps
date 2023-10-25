@@ -1,0 +1,109 @@
+LAMMPS (29 Oct 2020)
+# 3d Lennard-Jones melt
+
+### monodisperse polymer of Binghui paper
+
+units		lj
+atom_style	atomic
+atom_modify	map array
+boundary p p p
+
+
+#read_data chain_linker
+
+#read_restart chain_intermediate.restart
+
+region box block 0 1280 0 1040 0 1040
+create_box 7 box
+Created orthogonal box = (0.0000000 0.0000000 0.0000000) to (1280.0000 1040.0000 1040.0000)
+  1 by 1 by 1 MPI processor grid
+
+mass * 1
+
+
+
+
+include 'pots_s1s2'
+pair_style	lj/cut/bump/smooth/linear 2.9
+
+pair_coeff * * 0 0 0 0 0 0
+
+
+###Binghui
+
+##chain
+pair_coeff	1 1 0.1 2.1 1.0 0.0 0.0 2.9
+pair_coeff	2 2 0.1 2.1 1.0 0.0 0.0 2.9
+#pair_coeff  1 2 1.0 1.0 1.2 1.0 2.82 1.8 #Binghui's parameters
+
+
+##linker new
+
+pair_coeff  5 5  0.10 2.1 1.0 0.0 0.0 2.9 #repuls
+
+
+pair_coeff	1 3 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	1 4 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	2 3 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	2 4 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	3 5 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	4 5 0.1 2.1 0  0.0 0.00 2.9
+pair_coeff	3 4 1.5 1.00 1.36  1.0 1.0 1.7
+
+
+
+pair_coeff  1 5  0.01 2 0 0 0 2 #repuls
+pair_coeff  2 5  0.01 2 0 0 0 2 #repuls
+
+
+
+#####################
+
+
+pair_coeff	3 3 0.01 2.2 1.00 1.0 0.0 2.9 #g1g1
+pair_coeff	4 4 0.01 2.2 1.00 1.0 0.0 2.9 #g2g2
+
+pair_coeff	3 4 2.00 1.00 1.13 1.0 1.0 1.70 #g1g2
+pair_coeff	* 6*7 0.10 2.10 0.00 0.0 0.0 2.40 #repuls
+
+pair_coeff  3 6 0.01 1.7 1.00 0.0  0.0 2.     # g1s1
+pair_coeff  3 7 2    0.4 0.45 0.45 1   3.5    #g1s2
+
+pair_coeff  4 7 0.01 1.7 1.00 0.0 0.0 2. # g1s1
+pair_coeff  4 6 2 0.4 0.45 0.45 1 3.5 #attract
+
+pair_coeff  6 6 0.01 1.7 1.00 0.0 0.0 2 #repuls
+pair_coeff  7 7 0.01 1.7 1.00 0.0 0.0 2 #repuls
+pair_coeff  6 7 0.01 1.7 1.00 0.0 0.0 2 #repuls
+
+pair_coeff      1 1 0.1 2.1 1.0 0.0 0.0 2.9 #aa
+pair_coeff      2 2 0.1 2.1 1.0 0.0 0.0 2.9 #bb
+
+#pair_coeff	    1 5 2.0 1.0  1.2 1 0.6 1.7 #al attract
+pair_coeff          1 5  0.01 2 0 0 0 2        #al repuls
+
+pair_coeff	    1 2 1.0 1.0  1.2 1.0 0.45 1.8 #ab react
+pair_coeff          1 2 1.0 1.0  1.2 1.0 2.82 1.8 # ab no react
+
+
+
+
+
+########### A-L attract modification #############################################
+pair_coeff 1 5 2.0 1.0  1.2 1 0.4 1.9
+#pair_coeff          1 5 1.0 1.0  1.2 1 1.2 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_bump_0_4_cutoff_1.9
+Appending to table file table.txt with DATE: 2021-11-02
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 3.8
+  ghost atom cutoff = 3.8
+  binsize = 1.9, bins = 674 548 548
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut/bump/smooth/linear, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+quit

@@ -1,0 +1,847 @@
+# 3d Lennard-Jones melt
+
+### monodisperse polymer of Binghui paper
+
+units		lj
+atom_style	atomic
+atom_modify	map array
+boundary p p p
+
+
+#read_data chain_linker
+
+#read_restart chain_intermediate.restart
+
+region box block 0 1280 0 1040 0 1040
+create_box 7 box
+
+mass * 1
+
+
+
+
+include 'pots_s1s2'
+
+########### A-L attract modification #############################################
+pair_coeff 1 5 2.0 1.0  1.2 1 0.4 1.9
+#pair_coeff          1 5 1.0 1.0  1.2 1 1.2 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_bump_0_4_cutoff_1.9
+quit
+
+
+pair_coeff 1 5 2.0 1.0  1.2 1 0.4 1.7
+#pair_coeff          1 5 1.0 1.0  1.2 1 1.2 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_bump_0_4
+quit
+#pair_coeff 1 3 6.0 1.175 1.2 1.0 0.1 1.7  #repuls
+#pair_coeff  1 3 6.0 1.175   1.2 1   0.1 1.7
+#pair_write  1 3 500 r 0.01 3.0 table_orig.txt eps_6_sig_1_175
+
+######################### eff of cutoff############################################
+
+pair_coeff  1 3 1.0 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.0_bump_0.0_cut_2.2
+
+pair_coeff  1 3 2.0 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_2.0_bump_0.0_cut_2.2
+
+pair_coeff  1 3 2.5 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_2.5_bump_0.0_cut_2.2
+
+quit
+
+pair_coeff  1 3 1.5 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.5_bump_0.0_cut_2.2
+
+quit
+
+pair_coeff  1 3 0.1 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.1_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.2 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.2_bump_0.0_cut_2.2
+
+#pair_coeff  1 3 0.3 1.175   1.2 1   0.0 2.2
+#pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.3_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.4 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.4_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.5 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.5_bump_0.0_cut_2.2
+
+#pair_coeff  1 3 1.5 1.175   1.2 1   0.0 2.2
+#pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.6_bump_0.0_cut_2.2
+
+quit
+
+pair_coeff  1 3 0.6 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.6_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.15 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.15_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.3 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.3_bump_0.0_cut_2.2
+
+pair_coeff  1 3 0.9 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.9_bump_0.0_cut_2.2
+
+pair_coeff  1 3 1.2 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.2_bump_0.0_cut_2.2
+
+pair_coeff  1 3 1.5 1.175   1.2 1   0.0 2.2
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.5_bump_0.0_cut_2.2
+
+quit
+
+###################### run command: ~/bin/lmp_updated < in.table.0.1 ########
+
+##################### G/lnk effect of epsilon bump 0 DURING CROSSLINKGIN###########
+
+pair_coeff  1 3 0.0001  1.0   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.0_eps_0.0001_bump_0.0
+quit
+
+########### effect of epsilon bump 0 ##############################################
+
+pair_coeff  1 3 0.15 1.175   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.15_bump_0.0
+
+pair_coeff  1 3 0.3 1.175   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.3_bump_0.0
+
+pair_coeff  1 3 0.9 1.175   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.9_bump_0.0
+
+pair_coeff  1 3 1.2 1.175   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.2_bump_0.0
+
+pair_coeff  1 3 1.5 1.175   1.2 1   0.0 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_1.5_bump_0.0
+
+quit
+
+#################################this is how bump potentials were made#############
+pair_coeff  1 3 0.6 1.175   1.2 1   0.125 1.7
+pair_write  1 3 500 r 0.01 3.0 table.txt gpol_sigma_1.175_eps_0.6_bump_0.125
+###################################################################################
+#pair_coeff  1 3 0.6 1.175   1.2 1   1.0 1.7
+#pair_write  1 3 500 r 0.01 3.0 table_temp.txt gpol_sigma_1.175_eps_0.6_bump_1
+quit
+
+pair_coeff  1 3 3.0 1.175   1.2 1   0.2 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_3_bump_0.2
+
+pair_coeff  1 3 1.5 1.175   1.2 1   0.4 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_1.5_bump_0.4
+
+pair_coeff  1 3 0.75 1.175   1.2 1   0.8 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_0.75_bump_0.8
+
+pair_coeff  1 3 0.375 1.175   1.2 1   1.6 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_0.375_bump_1.6
+
+pair_coeff  1 3 0.1875 1.175   1.2 1   3.2 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_0.1875_bump_3.2
+
+pair_coeff  1 3 0.0938 1.175   1.2 1   6.4 1.7
+pair_write  1 3 500 r 0.01 3.0 table_orig.txt gpol_sigma_1.175_eps_0.0938_bump_6.4
+
+
+
+#pair_coeff  1 5  2.0 1.0  1.2 1 0.1 1.7 #repuls
+#pair_write 1 2 500 r 0.01 3.0 table.txt gpol_bump_0.1
+
+quit
+pair_write 1 1 500 r 0.01 3.0 table_test_des:k.txt aa
+pair_write 1 2 500 r 0.01 3.0 table_test_desk.txt ab
+pair_write 1 5 500 r 0.01 3.0 table_test_desk.txt al_repulse
+pair_write 3 4 500 r 0.01 3.0 table_test_desk.txt g1g2
+pair_write 3 3 500 r 0.01 3.0 table_test_desk.txt g1g1
+pair_write 3 7 500 r 0.01 3.0 table_test_desk.txt g1s2
+pair_write 3 6 500 r 0.01 3.0 table_test_desk.txt g1s1
+pair_write 1 6 500 r 0.01 3.0 table_test_desk.txt as1
+pair_write 6 6 500 r 0.01 3.0 table_test_desk.txt s1s1
+pair_write 6 7 500 r 0.01 3.0 table_test_desk.txt s1s2
+
+
+pair_coeff          1 5 1.0 1.0  1.2 1 1.2 1.7 #al attract
+pair_coeff          1 2 0.5 1.0  1.2 1.0 0.9 1.8 #ab react
+
+
+
+
+
+
+
+
+
+#pair_write 1 2 500 r 0.01 3.0 table.txt ab_react_eps_b_2
+#pair_write 1 5 500 r 0.01 3.0 table.txt al_attract_eps_b_2
+
+pair_coeff          1 2 0.5 1.0  1.2 1.0 5.64 1.8 #ab react
+#pair_write 1 2 500 r 0.01 3.0 table.txt ab_noreact_eps_b_2
+
+
+
+pair_coeff          1 5 0.5 1.0  1.2 1 2.4 1.7 #al attract
+pair_coeff          1 2 0.25 1.0  1.2 1.0 1.8 1.8 #ab react
+
+#pair_write 1 2 500 r 0.01 3.0 table.txt ab_react_eps_b_4
+#pair_write 1 5 500 r 0.01 3.0 table.txt al_attract_eps_b_4
+
+pair_coeff          1 2 0.25 1.0  1.2 1.0 11.28 1.8 #ab react
+#pair_write 1 2 500 r 0.01 3.0 table.txt ab_noreact_eps_b_4
+
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 6.0 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 4.5 1.8 #ab react
+
+
+
+#pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10
+#pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 3.0 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 2.25 1.8 #ab react
+
+
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_x_0_5
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_x_0_5
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 4.5 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 3.375 1.8 #ab react
+
+
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_x_0_75
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_x_0_75
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 1.2 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 0.9 1.8 #ab react
+
+
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_x_0_2
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_x_0_2
+
+
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 0.6 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 0.45 1.8 #ab react
+
+
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_x_0_1
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_x_0_1
+quit
+
+pair_coeff          1 5 0.2 1.0  1.2 1 6.0 0.17 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 4.5 0.18 #ab react
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_by_10
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_by_10
+
+pair_coeff          1 5 0.2 1.0  1.2 1 6.0 1.7 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 4.5 1.8 #ab react
+
+#pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_by_1
+#pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_by_1
+
+
+pair_coeff          1 5 0.2 1.0  1.2 1 6.0 0.34 #al attract
+pair_coeff          1 2 0.1 1.0  1.2 1.0 4.5 0.36 #ab react
+
+pair_write 1 2 500 r 0.01 3.0 table.ok.txt ab_react_eps_b_10_bump_by_5
+pair_write 1 5 500 r 0.01 3.0 table.ok.txt al_attract_eps_b_10_bump_by_5
+
+
+quit
+
+
+pair_coeff          1 5 0.1 1.0  1.2 1 6.0 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_eps_b_20
+
+pair_coeff          1 5 0.067 1.0  1.2 1 6.0 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_eps_b_30
+
+pair_coeff          1 5 0.033 1.0  1.2 1 6.0 1.7
+pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_eps_b_40
+
+pair_coeff          1 2 0.1 1.0  1.2 1.0 28.2 1.8 #ab react
+#pair_write 1 2 500 r 0.01 3.0 table.txt ab_noreact_eps_b_10
+
+
+
+pair_coeff      1 1 0.01 2.1 1.0 0.0 0.0 2.9 #aa
+pair_coeff      2 2 0.01 2.1 1.0 0.0 0.0 2.9 #aa
+
+pair_write 1 1 500 r 0.01 3.0 table.txt aa_react_eps_b_10
+pair_write 2 2  500 r 0.01 3.0 table.txt bb_attract_eps_b_10
+
+quit
+ 
+
+region box block 0 1280 0 1040 0 1040
+create_box 7 box
+#include "pots_s1s2"
+
+pair_style table linear 5000
+
+pair_coeff 1 1 table.txt aa
+pair_coeff 1 2 table.txt ab_noreact
+pair_coeff 2 2 table.txt bb
+
+pair_coeff 3 3 table.txt g1g1
+pair_coeff 3 4 table.txt g1g2
+pair_coeff 4 4 table.txt g2g2
+
+
+pair_coeff 5 5 table.txt ll
+pair_coeff 1 5 table.txt al_repulse
+pair_coeff 2 5 table.txt bl
+
+pair_coeff 1 3 table.txt ag1
+pair_coeff 1 4 table.txt ag2
+pair_coeff 2 3 table.txt bg1
+pair_coeff 2 4 table.txt bg2
+
+pair_coeff 6 6 table.txt s1s1
+pair_coeff 6 7 table.txt s1s2
+pair_coeff 7 7 table.txt s2s2
+
+pair_coeff 3 6 table.txt g1s1
+pair_coeff 4 7 table.txt g2s2
+pair_coeff 3 7 table.txt g1s2
+pair_coeff 4 6 table.txt g2s1
+
+pair_coeff 3 5 table.txt g1l
+pair_coeff 4 5 table.txt g2l
+pair_coeff 5 6 table.txt ls1
+pair_coeff 5 7 table.txt ls2
+
+
+pair_coeff 1 6 table.txt as1
+pair_coeff 1 7 table.txt as2
+pair_coeff 2 7 table.txt bs2
+pair_coeff 2 6 table.txt bs1
+
+#pair_coeff 1 5 table.txt al_attract
+#pair_coeff 1 2 table.txt ab_react
+
+create_atoms	1 single 0 0 0
+
+mass		* 1.0
+
+variable	t equal 0.25
+variable thigh equal 0.35
+variable tint equal 0.15
+
+variable tlow equal 0.001
+
+
+variable	c equal 2.35
+variable	s equal $c/2^(1./6.)
+variable 	pp equal 0.02
+ 
+#read_data pots add append
+#pair_style	lj/cut/bump/smooth/linear 2.9
+
+#pair_coeff * * 0 0 0 0 0 0
+##chain
+#pair_coeff	1 1 0.2 $s 1.0 1.0 0.0 $c 
+#pair_coeff	2 2 0.2 $s 1.0 1.0 0.0 $c
+#pair_coeff	1 2 2 1  1.1 1.2 0. $c #best so far
+
+##graphene
+#pair_coeff	3 3 0.09 1.9 1.0 1.0 0.0 $c 
+#pair_coeff	4 4 0.09 1.9 1.0 1.0 0.0 $c
+#pair_coeff	3 4 1.9 0.9375 1.1 1.2 0. $c #best so far
+
+##linker
+#pair_coeff  5 5  0.01 $s+0.3 1.0 1.0 0.0 $c #repuls
+##pair_coeff	1 5  3.0 1  1.1 1.2 0. $c #attract
+#pair_coeff	1 5  3.0 1  1.1 1.1 0.2 $c #attract
+#pair_coeff  2 5  0.01 $s+0.3 1.0 1.0 0.0 $c  #repuls 
+
+
+
+
+###Binghui
+
+##chain
+#pair_coeff	1 1 0.1 2.1 1.0 0.0 0.0 2.9 
+#pair_coeff	2 2 0.1 2.1 1.0 0.0 0.0 2.9
+#pair_coeff	1 2 1.0 1.0 1.0 1.2 2.82 1.8 #best so far
+#pair_coeff  1 2 1.0 1.0 1.2 1.0 2.82 1.8 #Binghui's parameters
+
+##linker#pair_coeff  5 5  0.01 $s+0.3 1.0 1.0 0.0 $c #repuls
+##pair_coeff	1 5  3.0 1  1.1 1.2 0. $c #attract
+#pair_coeff	1 5  2.0 1  1.1 1.1 0.2 $c #attract
+#pair_coeff  2 5  0.01 $s+0.3 1.0 1.0 0.0 $c  #repuls 
+
+
+##linker new
+
+#pair_coeff  5 5  0.10 2.1 1.0 0.0 0.0 2.9 #repuls
+#pair_coeff	1 5  2.00 1.0 0 0 0 2.9 #attract
+#pair_coeff  2 5  1.0 1.45 0 0 0 1.63 #repuls 
+
+#pair_coeff	1 5  2.0 1.00 1.2 1 0.2 2.9 #attract
+
+pair_modify shift yes
+
+neighbor	0.3 bin
+neigh_modify	every 20 delay 0 check yes
+
+
+thermo_style    custom step temp press density pe etotal temp vol  pxx pyy pzz pxz lx ly lz enthalpy
+
+thermo		1000
+
+
+
+delete_atoms group all
+
+variable repeat_x equal 4
+variable repeat_y equal 10
+variable repeat_z equal 10
+variable b_length equal 1.15
+variable	a4 loop ${repeat_y}
+label		loopa4
+
+variable	a2 loop ${repeat_z}
+label		loopa2
+#variable	myz equal 0.5*(zlo+zhi)+(zhi-zlo)*(${a4}-1)*0.125
+
+variable	myz equal zlo+(zhi-zlo)*(${a4}-1)*(1/${repeat_z})
+
+variable	myy equal ylo+(yhi-ylo)*(${a2}-1)*(1/${repeat_z})
+
+variable	myx equal xlo+2.5
+
+variable	a5 loop ${repeat_x}
+label		loopa5
+
+
+variable	a1 loop 75
+label		loopa1
+create_atoms	1 single ${myx} ${myy} ${myz}
+variable	myx equal ${myx}+1.1305
+create_atoms	2 single ${myx} ${myy} ${myz}
+variable	myx equal ${myx}+1.1305
+next		a1
+jump		in.pol_bing3 loopa1
+create_atoms	1 single ${myx} ${myy} ${myz}
+
+
+#variable	myx equal xlo+3.65
+#variable        a3 loop 75
+#label           loopa3
+#create_atoms    2 single ${myx} ${myy} ${myz}
+#variable        myx equal ${myx}+2.3
+#next            a3
+#jump            in.pol_bing3 loopa3
+
+variable	myx equal xlo+2.5+(xhi-xlo)*(${a5})*(1/${repeat_x})
+
+
+next		a5
+jump		in.pol_bing3 loopa5
+
+next		a2
+jump		in.pol_bing3 loopa2
+
+next		a4
+jump		in.pol_bing3 loopa4
+
+
+#read_data gr_8_8_2.lmp add append 
+
+#pair_coeff	1 3 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	1 4 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	2 3 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	2 4 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	3 5 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	4 5 0.1 2.1 0  0.0 0.00 2.9
+#pair_coeff	3 4 1.5 1.00 1.36  1.0 1.0 1.7 
+
+
+
+compute 1 all coord/atom cutoff 1.51
+
+thermo 1000
+thermo_style    custom step density temp pe etotal temp vol press pxx pyy pzz pxz lx ly lz enthalpy
+run 0
+
+
+dump            dump_geo all custom 10000 geodump3 id type x y z c_1
+run 1
+
+
+write_data chain_s.0
+
+
+create_atoms	5 random 12000 46521 NULL
+
+#create_atoms	6 random 1000 99875 NULL
+
+#create_atoms	7 random 1000 368169 NULL
+
+
+
+
+
+#pair_coeff  1 5  1.0 1.45 0 0 0 1.63 #repuls 
+#pair_coeff  2 5  1.0 1.45 0 0 0 1.63 #repuls 
+#pair_coeff  1 5  0.01 2 0 0 0 2 #repuls
+#pair_coeff  2 5  0.01 2 0 0 0 2 #repuls
+
+
+
+#####################
+
+#pair_coeff	3 3 0.09 1.7 1.00 1.0 0.0 2.3 
+#pair_coeff	4 4 0.09 1.7 1.00 1.0 0.0 2.3
+#pair_coeff	3 4 1.50 1.00 1.18 1.0 1.0 1.70 
+#pair_coeff	* 6 0.10 2.10 0.00 0.0 0.0 2.40 #best so far
+#pair_coeff	3 6 3.2 0.45 0.65 1.0 0.6 1.00 
+#pair_coeff	4 6 3.2 0.45 0.65 1.0 0.6 1.00 
+#pair_coeff  6 6 0.01 2.10 1.00 0.0 0.0 2.50 #repuls
+
+#pair_coeff 3 3   pair_33 LJ
+#pair_coeff 3 4   pair_34 LJ
+#pair_coeff 3 6   pair_36 LJ
+#pair_coeff 6 6   pair_66 LJ
+
+
+#group g55 type 5
+
+#variable tnow0 equal temp
+
+
+#pair_coeff 1 1 500 r 0.5 3 pair_11 LJ
+#pair_coeff 1 2 500 r 0.5 3 pair_12 LJ
+#pair_coeff 1 5 500 r 0.5 3 pair_15_repuls LJ
+#pair_coeff 2 5 500 r 0.5 3 pair_25 LJ
+
+#pair_coeff 1 3 500 r 0.5 3 pair_13 LJ
+#pair_coeff 3 5 500 r 0.5 3 pair_35 LJ
+#pair_coeff 1 6 500 r 0.5 3 pair_16 LJ
+
+
+
+group g_sat type 3 4 6 
+group saturator type 6 
+
+
+
+
+#####################
+
+
+
+
+
+
+
+#minimize 1.0e-4 1.0e-6 100 1000
+
+#velocity	all create ${tint} 87287
+
+
+
+group g55 type 5
+
+fix 1 g55 nve/limit 0.1
+run 200000
+unfix 1
+
+
+variable tnow0 equal temp
+
+
+#fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+#run 300000
+#unfix nvt_2
+
+#replicate 1 5 5
+#write_restart rest.repl
+#write_data chain_s.1
+
+
+#fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+#run 300000
+#unfix nvt_2
+
+variable LX equal lx 
+variable LY equal ly 
+variable LZ equal lz 
+
+variable hashh_x equal 5
+variable hashh_y equal 1
+variable hashh_z equal 1
+
+variable rep_x equal 0
+variable rep_y equal 0
+variable rep_z equal 0
+
+variable        a8 loop ${hashh_z}-1
+label           loopa8
+
+variable rep_z equal ${rep_z}+(${LZ}/${hashh_z})
+
+variable        a9 loop ${hashh_y}-1
+label           loopa9
+
+variable rep_y equal ${rep_y}+(${LY}/${hashh_y})
+
+variable        a10 loop ${hashh_x}-1
+label           loopa10
+
+#variable rep_x equal ${rep_x}+(${LX}/${hashh})
+
+read_data Gr_saturated_8_8_1 add append shift ${rep_x} ${rep_y} ${rep_z} 
+variable rep_x equal ${rep_x}+(${LX}/${hashh_x})
+#write_data chain_s.g
+
+next            a10
+jump            in.pol_bing3 loopa10
+variable rep_x equal 0
+
+
+next            a9
+jump            in.pol_bing3 loopa9
+variable rep_y equal 0
+
+
+next            a8
+jump            in.pol_bing3 loopa8
+
+write_data chain_s.g
+group g4 type 4
+
+
+#pair_coeff 1 1 100 r 0.5 3 pair_11 LJ
+#pair_coeff 1 2 100 r 0.5 3 pair_12 LJ
+#pair_coeff 1 5 100 r 0.5 3 pair_15_repuls LJ
+
+#pair_coeff 1 3 100 r 0.5 3 pair_13 LJ
+#pair_coeff 3 5 100 r 0.5 3 pair_35 LJ
+#pair_coeff 3 4 100 r 0.5 3 pair_34 LJ
+#pair_coeff 6 7 100 r 0.5 3 pair_67 LJ
+#pair_coeff 3 6 100 r 0.5 3 pair_36 LJ
+#pair_coeff 4 7 100 r 0.5 3 pair_47 LJ
+#pair_coeff 4 6 100 r 0.5 3 pair_46 LJ
+#pair_coeff 3 7 100 r 0.5 3 pair_37 LJ
+#pair_coeff 1 6 100 r 0.5 3 pair_16 LJ
+#pair_coeff 2 7 100 r 0.5 3 pair_27 LJ
+
+
+minimize 1.0e-4 1.0e-6 100 1000
+
+group g_sat type 3 4 6 
+group saturator type 6 
+group non_g_sat type 1 2 5
+group non_sat type 1 2 3 4 5
+
+
+
+velocity        non_g_sat create ${tint} 87287
+
+fix 1 all nve/limit 0.1
+run 200000
+unfix 1
+
+#fix 1 all nve/limit 0.1
+#run 100000
+#unfix 1
+
+velocity all create ${tint} 546212
+
+fix nvt_2 all nvt temp ${tint} ${tint} 0.1
+run 2000000
+unfix nvt_2
+
+compute 2 all coord/atom cutoff 1.51
+compute         3 all reduce sum c_2
+
+thermo_style    custom step density temp pe etotal c_3 vol press pxx pyy pzz pxz lx ly lz enthalpy
+run 0
+
+variable        freeat atom "c_2 == 0.0"
+group           freeatoms variable freeat
+
+group           untethered subtract freeatoms non_sat
+
+delete_atoms group untethered
+
+
+write_restart rest.rep_001
+write_data chain_s_001
+
+fix 1 all nve/limit 0.1
+run 100000
+unfix 1
+
+fix            nvt_2 all nvt temp ${tint} ${tint} 0.1
+run 300000
+unfix nvt_2
+
+#pair_coeff 1 1 100 r 0.5 3 pair_11 LJ
+#pair_coeff 1 2 100 r 0.5 3 pair_12 LJ
+#pair_coeff 1 5 100 r 0.5 3 pair_15_repuls LJ
+
+#pair_coeff 1 3 100 r 0.5 3 pair_13 LJ
+#pair_coeff 3 5 100 r 0.5 3 pair_35 LJ
+#pair_coeff 3 4 100 r 0.5 3 pair_34 LJ
+
+
+#replicate 1 5 5
+write_restart rest.repl
+write_data chain_s.1
+
+
+#velocity g4 create ${tint} 865648
+
+#write_restart rest.rep2
+#write_data chain_s.2
+
+
+#fix 1 all nve/limit 0.1
+#run 100000
+#unfix 1
+
+
+fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+run 500000
+unfix nvt_2
+
+write_restart rest.rep2_large
+write_data chain_s.2_large
+
+fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+fix             2 all deform 1 x scale 0.125 y scale 0.05 z scale 0.05
+
+
+run 1000000
+
+unfix nvt_2 
+unfix 2
+
+
+fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+run 500000
+unfix nvt_2
+
+write_restart rest.rep2
+write_data chain_s.2
+ 
+
+#pair_coeff	1 5  2.0 1.00 1.2 1 0.6 1.7 #attract
+
+
+#pair_coeff 1 5 100 r 0.5 3 pair_15_attract LJ
+
+pair_coeff 1 5 table.txt al_attract
+
+fix		1 all nvt temp ${tint} ${tint} 0.1
+
+run 3000000
+
+
+#unfix 21
+#unfix 22
+unfix 1
+write_restart rest.crosslinked
+write_data chain_linked
+
+
+
+variable pnow equal press
+variable tnow equal temp
+
+
+write_restart chain_intermediate.restart
+write_data chain_intermediate.lmp
+
+#label rstrt
+
+fix		nvt_2 all nvt temp ${tint} ${tlow} 0.1
+
+run 100000
+
+unfix nvt_2
+
+#pair_coeff	1 2 1.0 1.0 1.2  1.0 0.45 1.8 #best so far
+pair_coeff 1 2 table.txt ab_react
+
+fix		nvt_2 all nvt temp ${tlow} ${tlow} 0.1
+
+run 500000
+
+
+unfix nvt_2
+
+
+
+fix             npt_1 all npt temp ${tlow} ${tlow} 1.0 x 0.0 0.0 1 y 0.0 0.0 1.0 z 0.0 0.0 1.0 
+
+#fix		nvt_2 all nvt temp ${tint} ${tint} 0.1
+
+run 500000
+
+unfix npt_1
+
+write_restart fully_relaxed.restart
+
+#quit
+
+#unfix  npt_1
+#unfix  nvt_2
+
+
+#fix		npt_2 all npt iso 0 1 1 temp ${thigh} ${thigh} 0.1
+
+variable        tmp equal lx
+variable        lx0 equal ${tmp}
+
+variable	strain equal "(lx-v_lx0)/v_lx0"
+
+#variable	w equal 0.016
+
+
+fix             1 all npt temp ${tlow} ${tlow} 1.0 y 0.0 0.0 1.0 z 0.0 0.0 1.0 
+fix             2 all deform 1 x erate 0.0005
+
+variable	p11 equal v_strain
+variable	p1 equal "pxx"
+variable	p2 equal "pyy"
+variable	p3 equal "pzz"
+variable	p4 equal "(1/3)*(pxx+pyy+pzz)"
+variable	p5 equal "press"
+variable	v1 equal "vol"
+variable	d1 equal "density"
+
+
+
+variable	v equal "lx*ly*lz"
+
+#fix		def1 all print 50 "${p1} {p11} {p5} ${d1} ${v1} ${p2} ${p3} ${p4}" file strain.dat screen no
+
+fix		def1 all print 50 "${p11} ${p1} ${p2} ${p3} ${p4} ${p5} ${d1}" file strain.dat screen no
+
+
+run 1500000
+#unfix  npt_2
+
+write_data chain_linker_pressurized
+
+
