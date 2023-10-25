@@ -23,7 +23,7 @@ mass * 1
 include 'pots_s1s2'
 
 ########### A-L attract modification #############################################
-pair_coeff 1 5 2.0 1.0  1.2 1 0.4 1.9
+pair_coeff 1 5 2.0 1.0  1.2 1 0.4 1.9  ## type-1, type-2, epsilon, sigma, bump_start/sigma, bump_end/cutoff, bump_energy/sigma, curoff
 #pair_coeff          1 5 1.0 1.0  1.2 1 1.2 1.7
 pair_write          1 5 500 r 0.01 3.0 table.txt al_attract_bump_0_4_cutoff_1.9
 quit
